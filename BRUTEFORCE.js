@@ -41,13 +41,17 @@ function fetchDataRecursively(index = 0) {
     )
       .then((response) => response.json())
       .then((data) => {
-        const country = document.createElement("h2");
-        country.innerText = `${paysUE[index].name}`
-        stat.appendChild(country)
+        const country = document.createElement(`${paysUE[index].name}`);
+        const countryName = document.createElement("countryName");
+        const countryStat = document.createElement("stat")
+        countryName.innerHTML = `<h2>${paysUE[index].name}</h2>`;
+        stat.appendChild(country);
+        country.appendChild(countryName);
+        country.appendChild(countryStat);
         for (let key in data.powerProductionBreakdown) {
-            const nuclear = document.createElement("p");
-            nuclear.innerText = `${key}: ${data.powerProductionBreakdown[key]}`
-            stat.appendChild(nuclear);
+          const nuclear = document.createElement("p");
+          nuclear.innerText = `${key}: ${data.powerProductionBreakdown[key]}`;
+          countryStat.appendChild(nuclear);
         }
         setTimeout(() => fetchDataRecursively(index + 1), 1000);
       })
