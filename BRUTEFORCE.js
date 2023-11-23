@@ -16,7 +16,6 @@ const paysUE = [
   { name: "Lettonie", iso2: "LV" },
   { name: "Lituanie", iso2: "LT" },
   { name: "Luxembourg", iso2: "LU" },
-  { name: "Malte", iso2: "MT" },
   { name: "Pays-Bas", iso2: "NL" },
   { name: "Pologne", iso2: "PL" },
   { name: "Portugal", iso2: "PT" },
@@ -27,57 +26,37 @@ const paysUE = [
   { name: "Suède", iso2: "SE" },
 ];
 
-async function fetchDataRecursively(index = 0) {
-  if (index < 26) {
-    const localAbortController = new AbortController();
-
-    const requestOptionsWithDelay = {
+function fetchDataRecursively(index = 0) {
+  if (index < paysUE.length) {
+    const stat = document.querySelector("#conteneur");
+    const requestOptions = {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer 8ucrTc5zJ2oCc9lrXUa9FArZlnFfqDWG`,
+        Authorization: "Bearer 8ucrTc5zJ2oCc9lrXUa9FArZlnFfqDWG",
       },
-      signal: localAbortController.signal,
     };
-
-    try {
-      const response = await fetch(
-        `https://api-access.electricitymaps.com/free-tier/power-breakdown/latest?zone=${
-          paysUE[index % paysUE.length].iso2
-        }`,
-        requestOptionsWithDelay
-      );
-
-      if (localAbortController.signal.aborted) {
-        console.log(
-          `Requête annulée pour ${paysUE[index % paysUE.length].iso2}`
-        );
-      } else if (!response.ok) {
-        console.error(`Erreur HTTP: ${response.status}`);
-      } else {
-        const data = await response.json();
-        if (data.powerProductionBreakdown) {
-          console.log(data.powerProductionBreakdown);
-        } else {
-          console.error(
-            `Données manquantes pour ${paysUE[index % paysUE.length].iso2}`
-          );
+    fetch(
+      `https://api-access.electricitymaps.com/free-tier/power-breakdown/latest?zone=${paysUE[index].iso2}`,
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        const country = document.createElement("h2");
+        country.innerText = `${paysUE[index].name}`
+        stat.appendChild(country)
+        for (let key in data.powerProductionBreakdown) {
+            const nuclear = document.createElement("p");
+            nuclear.innerText = `${key}: ${data.powerProductionBreakdown[key]}`
+            stat.appendChild(nuclear);
         }
-      }
-    } catch (error) {
-      console.error(
-        `Erreur pendant la requête pour ${paysUE[index % paysUE.length].iso2}:`,
-        error
-      );
-    }
-
-    // Appelle la fonction récursivement avec l'index suivant après le délai
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    fetchDataRecursively(index + 1);
+        setTimeout(() => fetchDataRecursively(index + 1), 1000);
+      })
+      .catch((error) => {
+        console.error(`Erreur pour ${paysUE[index].name}:`, error);
+        setTimeout(() => fetchDataRecursively(index + 1), 1000);
+      });
   } else {
     console.log("Toutes les requêtes ont été effectuées");
   }
 }
-
-// Appelle la fonction récursive
 fetchDataRecursively();
