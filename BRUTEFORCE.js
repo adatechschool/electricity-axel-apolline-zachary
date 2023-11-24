@@ -41,14 +41,19 @@ function fetchDataRecursively(index = 0) {
     )
       .then((response) => response.json())
       .then((data) => {
+        const keys = Object.keys(data.powerProductionBreakdown);
+        const numberOfKeys = keys.length;
+        const keysToExclude = 3;
         const country = document.createElement(`${paysUE[index].name}`);
         const countryName = document.createElement("countryName");
-        const countryStat = document.createElement("stat")
+        const countryStat = document.createElement("stat");
         countryName.innerHTML = `<h2>${paysUE[index].name}</h2>`;
         stat.appendChild(country);
         country.appendChild(countryName);
         country.appendChild(countryStat);
-        for (let key in data.powerProductionBreakdown) {
+        countryStat.className = "country-container"
+        for (let i = 0; i < numberOfKeys - keysToExclude; i++) {
+          const key = keys[i];
           const nuclear = document.createElement("p");
           nuclear.innerText = `${key}: ${data.powerProductionBreakdown[key]}`;
           countryStat.appendChild(nuclear);
