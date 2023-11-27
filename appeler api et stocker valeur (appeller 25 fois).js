@@ -86,10 +86,10 @@ function generate (dataArray) {
     countryStat.className = "country-container"
 
     const countryName = document.createElement("countryName");
-    countryName.innerHTML = `<h3>${findCountryName(pays.zone)}</h3>`;
+    countryName.innerHTML = `<h2>${findCountryName(pays.zone)}</h2>`;
     
-    country.appendChild(countryName);
     conteneur.appendChild(country);
+    country.appendChild(countryName);
     country.appendChild(countryStat)
 
     const keys = Object.keys(pays.powerProductionBreakdown);
