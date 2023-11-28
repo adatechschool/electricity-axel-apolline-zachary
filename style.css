@@ -1,8 +1,20 @@
 .country-container {
-    display: flex; /* Utiliser un conteneur flex pour aligner les éléments horizontalement */
-    flex-wrap: nowrap; /* Ne pas permettre le retour à la ligne pour tous les éléments */
-  }
-  
-  .country-container p {
-    margin-right: 10px; /* Marge à droite pour séparer les éléments (ajustez selon vos préférences) */
-  }
+  display: flex;
+  flex-wrap: nowrap; 
+  gap: 15px;
+}
+
+.country-name {
+  display: flex; 
+  flex-wrap: nowrap; 
+  gap: 15px;
+}
+
+
+.btn-trier {
+  background-color: gray;
+}
+
+#lookByCountryName {
+  background-color: gray;
+}

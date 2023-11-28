@@ -1,14 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
+    <link rel="stylesheet" href="loading.css" />
     <link rel="stylesheet" href="style.css">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>silence ça affiche</title>
-</head>
-<body>
-    <button class="btn-trier" type="true">Trier par nucleaire</button>
-    <div id="conteneur"></div>
-    <script src="appeler api et stocker valeur (appeller 25 fois).js"></script>
-</body>
+  </head>
+  <body>
+      <div class="loader">
+        <span class="letter">F</span>
+        <span class="letter">E</span>
+        <span class="letter">T</span>
+        <span class="letter">C</span>
+        <span class="letter">H</span>
+        <span class="letter">I</span>
+        <span class="letter">N</span>
+        <span class="letter">G</span>
+        <span class="letter">_</span>
+        <span class="letter">D</span>
+        <span class="letter">A</span>
+        <span class="letter">T</span>
+        <span class="letter">A</span>
+    </div>
+    <div class="acceuil">
+        <button class="btn-trier" type="true" event="onclick"> Trier par nucleaire</button>
+        <input id="lookByCountryName" autocomplete="off">
+        <div id="conteneur"></div>
+    </div>
+    <script src="API.js"></script>
+  </body>
 </html>

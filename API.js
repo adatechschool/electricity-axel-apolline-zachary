@@ -31,7 +31,6 @@ const paysUE = [
 const iso2Array = paysUE.map((country) => country.iso2);
 const DataArray = [];
 
-
 //fonction pour retourner tableau de data pour tout pays d'europe
 const fetchData = async () => {
   console.log("Attente de la fin de fetchData");
@@ -57,9 +56,12 @@ const fetchData = async () => {
 
     await new Promise((resolve) => setTimeout(resolve, 500));
   }
-  return DataArray
-};
+  const loader = document.querySelector(".loader");
 
+  loader.classList.add("fondu-out");
+
+  return DataArray;
+};
 
 //fonction pour retrouver le nom d'un pays
 function findCountryName(iso2) {
@@ -67,63 +69,75 @@ function findCountryName(iso2) {
   return foundIso2.name;
 }
 
-
 //fonction pour retrouver l'iso2 d'un pays
 function findcountryIso2(countryName) {
   const foundcountry = paysUE.find((pays) => countryName === pays.name);
   return foundcountry.name;
 }
 
-
 //fonction pour generer data de pays
-function generate (dataArray) {
+function generate(dataArray) {
   const conteneur = document.querySelector("#conteneur");
   console.log("fetchData est maintenant terminé, exécutez votre logique ici.");
   for (const pays of dataArray) {
     const country = document.createElement("country");
 
-    const countryStat = document.createElement("countryStat");
-    countryStat.className = "country-container"
-
     const countryName = document.createElement("countryName");
     countryName.innerHTML = `<h2>${findCountryName(pays.zone)}</h2>`;
-    
+    countryName.innerHTML += `<img src="https://flagsapi.com/${pays.zone}/flat/64.png"></img>`;
+    countryName.className = "country-name";
+
+    const countryStat = document.createElement("countryStat");
+    countryStat.className = "country-container";
+
     conteneur.appendChild(country);
     country.appendChild(countryName);
-    country.appendChild(countryStat)
+    country.appendChild(countryStat);
 
     const keys = Object.keys(pays.powerProductionBreakdown);
     const keysToIterate = keys.slice(0, keys.length - 3);
     for (const key of keysToIterate) {
       const value = pays.powerProductionBreakdown[key];
-      const energieValue = document.createElement(`${key}`)
-      energieValue.innerHTML = `<p>${key}: ${value}</p>`
-      countryStat.appendChild(energieValue)
+      const energieValue = document.createElement(`${key}`);
+      energieValue.innerHTML = `<p>${key}: ${value}</p>`;
+      countryStat.appendChild(energieValue);
     }
   }
-};
-
+}
 
 //bouton trier
 const boutonTrier = document.querySelector(".btn-trier");
 
 boutonTrier.addEventListener("click", function () {
-  let ordre = 1
+  let ordre = 1;
   if (boutonTrier.getAttribute("type") === "true") {
-    boutonTrier.setAttribute("type", "false")
+    boutonTrier.setAttribute("type", "false");
   } else {
-    ordre = -1 
-    boutonTrier.setAttribute("type", "true")
+    ordre = -1;
+    boutonTrier.setAttribute("type", "true");
   }
-    const CountryByNuclear = Array.from(DataArray);
-    CountryByNuclear.sort(function (a, b) {
-        return ordre*(b.powerProductionBreakdown.nuclear - a.powerProductionBreakdown.nuclear);
-     });
-     document.querySelector("#conteneur").innerHTML = "";
-     generate(CountryByNuclear);
+  const CountryByNuclear = Array.from(DataArray);
+  CountryByNuclear.sort(function (a, b) {
+    return (
+      ordre *
+      (b.powerProductionBreakdown.nuclear - a.powerProductionBreakdown.nuclear)
+    );
+  });
+  document.querySelector("#conteneur").innerHTML = "";
+  generate(CountryByNuclear);
 });
 
+//input pour chercher par nom de pays
+const inputForCountryName = document.querySelector("#lookByCountryName");
 
-
+inputForCountryName.addEventListener("input", function () {
+  const countryWhithInput = DataArray.filter((country) =>
+    findCountryName(country.zone)
+      .toLowerCase()
+      .includes(inputForCountryName.value.toLowerCase())
+  );
+  document.querySelector("#conteneur").innerHTML = "";
+  generate(countryWhithInput);
+});
 
 fetchData().then((dataArray) => generate(dataArray));
