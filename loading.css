@@ -4,16 +4,7 @@
   /* Ajoute d'autres variantes de la police ici si nécessaire */
 }
 
-body {
-  font-family: monserat;
-  height: 100vh;  
-  margin: 0;
-  color: white;
-  background-color: rgb(30, 29, 29);  
-}
-
 /* loading screen */
-
 .loader {
   position: absolute;
   width: 100%;
@@ -22,6 +13,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 }
 
 .letter {

@@ -97,8 +97,8 @@ function generateCharts(dataArray) {
     chartContainer.className = "chart"; // Appliquer le style de la classe .chart définie dans le CSS
 
     const chartCanvas = document.createElement("canvas");
-    chartCanvas.width = 650; // Définir la largeur du diagramme (ajuster selon les besoins)
-    chartCanvas.height = 300; // Définir la hauteur du diagramme (ajuster selon les besoins)
+    chartCanvas.width = 400; // Définir la largeur du diagramme (ajuster selon les besoins)
+    chartCanvas.height = 800; // Définir la hauteur du diagramme (ajuster selon les besoins)
 
     chartContainer.appendChild(flagImg);
     chartContainer.appendChild(chartCanvas);
@@ -118,7 +118,7 @@ function generateCharts(dataArray) {
 
     const ctx = chartCanvas.getContext("2d");
     const chart = new Chart(ctx, {
-      type: "bar",
+      type: "doughnut",
       data: {
         labels: [
           "Nucléaire",
