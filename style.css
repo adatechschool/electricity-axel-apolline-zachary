@@ -45,6 +45,9 @@ header {
   gap: 15px;
 }
 
+#conteneur {
+  display: flex;
+}
 
 body{
   height: 100%;
