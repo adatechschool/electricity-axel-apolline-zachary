@@ -1,7 +1,22 @@
 .country-container {
   display: flex;
+  align-items: center;
+  flex-wrap: nowrap; 
+  gap: 200px;
+}
+
+.country-name {
+  display: flex; 
   flex-wrap: nowrap; 
   gap: 15px;
+}
+
+.btn-trier {
+  background-color: gray;
+}
+
+#lookByCountryName {
+  background-color: gray;
 }
 
 .country-name {
@@ -11,10 +26,27 @@
 }
 
 
-.btn-trier {
-  background-color: gray;
+body{
+  height: 100%;
+  width: 100%;
+  background: rgb(1, 1, 29);
+  display: flex; 
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+  
 }
 
-#lookByCountryName {
-  background-color: gray;
+.country-container p {
+margin-right: 10px;
+}
+
+.chart{
+padding: 2rem;
+border: 1px solid #f49131;
+border-radius: 1rem;
+background: #251c35;
+box-shadow: 0 0 16px rgba(0, 0, 0, 0.8 );
+margin-bottom: 20px;
 }

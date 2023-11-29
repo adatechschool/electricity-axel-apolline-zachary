@@ -76,33 +76,94 @@ function findcountryIso2(countryName) {
 }
 
 //fonction pour generer data de pays
-function generate(dataArray) {
+function generateCharts(dataArray) {
   const conteneur = document.querySelector("#conteneur");
   console.log("fetchData est maintenant terminé, exécutez votre logique ici.");
-  for (const pays of dataArray) {
+
+  dataArray.forEach((pays) => {
     const country = document.createElement("country");
+    country.className = "country-container";
 
-    const countryName = document.createElement("countryName");
-    countryName.innerHTML = `<h2>${findCountryName(pays.zone)}</h2>`;
-    countryName.innerHTML += `<img src="https://flagsapi.com/${pays.zone}/flat/64.png"></img>`;
-    countryName.className = "country-name";
+    const flagImg = document.createElement("countryFlag");
+    flagImg.innerHTML = `<h2>${findCountryName(pays.zone)}</h2>`;
+    flagImg.innerHTML += `<img src="https://flagsapi.com/${pays.zone}/flat/64.png"></img>`;
+    flagImg.className = "country-name";
 
-    const countryStat = document.createElement("countryStat");
-    countryStat.className = "country-container";
-
-    conteneur.appendChild(country);
-    country.appendChild(countryName);
-    country.appendChild(countryStat);
-
+    const countryData = pays.powerProductionBreakdown;
     const keys = Object.keys(pays.powerProductionBreakdown);
     const keysToIterate = keys.slice(0, keys.length - 3);
-    for (const key of keysToIterate) {
-      const value = pays.powerProductionBreakdown[key];
-      const energieValue = document.createElement(`${key}`);
-      energieValue.innerHTML = `<p>${key}: ${value}</p>`;
-      countryStat.appendChild(energieValue);
-    }
-  }
+
+    const chartContainer = document.createElement("div");
+    chartContainer.className = "chart"; // Appliquer le style de la classe .chart définie dans le CSS
+
+    const chartCanvas = document.createElement("canvas");
+    chartCanvas.width = 650; // Définir la largeur du diagramme (ajuster selon les besoins)
+    chartCanvas.height = 300; // Définir la hauteur du diagramme (ajuster selon les besoins)
+
+    chartContainer.appendChild(flagImg);
+    chartContainer.appendChild(chartCanvas);
+    conteneur.appendChild(chartContainer);
+
+    const energySources = [
+      "Nucléaire",
+      "Géothermal",
+      "Biomasse",
+      "Charbon",
+      "Éolien",
+      "Solaire",
+      "Hydrolique",
+      "Gaz",
+      "Pétrole",
+    ];
+
+    const ctx = chartCanvas.getContext("2d");
+    const chart = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: [
+          "Nucléaire",
+          "Géothermal",
+          "Biomasse",
+          "Charbon",
+          "Éolien",
+          "Solaire",
+          "Hydrolique",
+          "Gaz",
+          "Pétrole",
+        ],
+        datasets: [
+          {
+            // label: findCountryName(pays.zone),
+            data: Object.values(countryData),
+            backgroundColor: [
+              "rgba(255, 99, 132, 0.2)",
+              "rgba(54, 162, 235, 0.2)",
+              "rgba(255, 206, 86, 0.2)",
+              "rgba(75, 192, 192, 0.2)",
+              "rgba(153, 102, 255, 0.2)",
+              "rgba(255, 159, 64, 0.2)",
+            ],
+            borderColor: [
+              "rgba(255, 99, 132, 1)",
+              "rgba(54, 162, 235, 1)",
+              "rgba(255, 206, 86, 1)",
+              "rgba(75, 192, 192, 1)",
+              "rgba(153, 102, 255, 1)",
+              "rgba(255, 159, 64, 1)",
+            ],
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    });
+  });
 }
 
 //bouton trier
@@ -124,7 +185,7 @@ boutonTrier.addEventListener("click", function () {
     );
   });
   document.querySelector("#conteneur").innerHTML = "";
-  generate(CountryByNuclear);
+  generateCharts(CountryByNuclear);
 });
 
 //input pour chercher par nom de pays
@@ -137,7 +198,7 @@ inputForCountryName.addEventListener("input", function () {
       .includes(inputForCountryName.value.toLowerCase())
   );
   document.querySelector("#conteneur").innerHTML = "";
-  generate(countryWhithInput);
+  generateCharts(countryWhithInput);
 });
 
-fetchData().then((dataArray) => generate(dataArray));
+fetchData().then((dataArray) => generateCharts(dataArray));
