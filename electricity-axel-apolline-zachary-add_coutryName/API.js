@@ -89,9 +89,21 @@ function generateCharts(dataArray) {
     flagImg.innerHTML += `<img src="https://flagsapi.com/${pays.zone}/flat/64.png"></img>`;
     flagImg.className = "country-name";
 
-    const countryData = pays.powerProductionBreakdown;
-    const keys = Object.keys(pays.powerProductionBreakdown);
-    const keysToIterate = keys.slice(0, keys.length - 3);
+    const keysToExclude = ["unknown", "hydro discharge", "battery discharge"];
+
+    const countryData = Object.fromEntries(
+      Object.entries(pays.powerConsumptionBreakdown).filter(
+        ([key]) => !keysToExclude.includes(key)
+      )
+    );
+
+    const filtercountryData = Object.fromEntries(
+      Object.entries(countryData).filter(
+        ([key, value]) => value !== 0 && value !== null
+      )
+    );
+
+    const keysOfPowerConsumption = Object.keys(filtercountryData);
 
     const chartContainer = document.createElement("div");
     chartContainer.className = "chart"; // Appliquer le style de la classe .chart définie dans le CSS
@@ -120,45 +132,53 @@ function generateCharts(dataArray) {
     const chart = new Chart(ctx, {
       type: "doughnut",
       data: {
-        labels: [
-          "Nucléaire",
-          "Géothermal",
-          "Biomasse",
-          "Charbon",
-          "Éolien",
-          "Solaire",
-          "Hydrolique",
-          "Gaz",
-          "Pétrole",
-        ],
+        labels: keysOfPowerConsumption,
         datasets: [
           {
             // label: findCountryName(pays.zone),
-            data: Object.values(countryData),
+            data: Object.values(filtercountryData),
             backgroundColor: [
-              "rgba(255, 99, 132, 0.2)",
-              "rgba(54, 162, 235, 0.2)",
-              "rgba(255, 206, 86, 0.2)",
-              "rgba(75, 192, 192, 0.2)",
-              "rgba(153, 102, 255, 0.2)",
-              "rgba(255, 159, 64, 0.2)",
+              "rgba(0, 255, 0, 0.4)",
+              "rgba(255, 165, 0, 0.4)",
+              "rgba(139, 69, 19, 0.4)",
+              "rgba(0, 0, 0, 0.4)",
+              "rgba(255, 255, 255, 0.4)",
+              "rgba(255, 255, 0, 0.4)",
+              "rgba(0, 0, 255, 0.4)",
+              "rgba(128, 128, 128, 0.4)",
+              "rgba(139, 69, 19, 0.4)",
             ],
             borderColor: [
-              "rgba(255, 99, 132, 1)",
-              "rgba(54, 162, 235, 1)",
-              "rgba(255, 206, 86, 1)",
-              "rgba(75, 192, 192, 1)",
-              "rgba(153, 102, 255, 1)",
-              "rgba(255, 159, 64, 1)",
+              "rgba(0, 255, 0, 1)",
+              "rgba(255, 165, 0, 1)",
+              "rgba(139, 69, 19, 1)",
+              "rgba(0, 0, 0, 1)",
+              "rgba(255, 255, 255, 1)",
+              "rgba(255, 255, 0, 1)",
+              "rgba(0, 0, 255, 1)",
+              "rgba(128, 128, 128, 1)",
+              "rgba(139, 69, 19, 1)",
             ],
             borderWidth: 1,
           },
         ],
       },
       options: {
+        plugins: {
+          // 'legend' now within object 'plugins {}'
+          legend: {
+            labels: {
+              color: "white",
+            },
+          },
+        },
         scales: {
           y: {
             beginAtZero: true,
+            ticks: {
+              color: "white", // not 'fontColor:' anymore
+              //fontSize: 14,
+            },
           },
         },
       },
@@ -186,19 +206,6 @@ boutonTrier.addEventListener("click", function () {
   });
   document.querySelector("#conteneur").innerHTML = "";
   generateCharts(CountryByNuclear);
-});
-
-//input pour chercher par nom de pays
-const inputForCountryName = document.querySelector("#lookByCountryName");
-
-inputForCountryName.addEventListener("input", function () {
-  const countryWhithInput = DataArray.filter((country) =>
-    findCountryName(country.zone)
-      .toLowerCase()
-      .includes(inputForCountryName.value.toLowerCase())
-  );
-  document.querySelector("#conteneur").innerHTML = "";
-  generateCharts(countryWhithInput);
 });
 
 fetchData().then((dataArray) => generateCharts(dataArray));
