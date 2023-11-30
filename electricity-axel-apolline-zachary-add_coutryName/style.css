@@ -4,9 +4,7 @@ header {
   left: 0;
   width: 100%;
   background-image: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
-  /* background: rgb(0, 0, 0, 0.2); Vous pouvez ajuster la couleur de fond selon vos préférences */
   padding: 10px 10px; /* Ajoutez un peu de remplissage pour l'apparence */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ajoutez une ombre pour le style */
 }
 
 .country-container {

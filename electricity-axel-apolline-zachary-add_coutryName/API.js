@@ -1,6 +1,7 @@
 // liste des pays de l'EU
 const paysUE = [
   { name: "Autriche", iso2: "AT" },
+  { name: "Allemagne", iso2: "DE" },
   { name: "Belgique", iso2: "BE" },
   { name: "Bulgarie", iso2: "BG" },
   { name: "Chypre", iso2: "CY" },
@@ -22,9 +23,11 @@ const paysUE = [
   { name: "Portugal", iso2: "PT" },
   { name: "République tchèque", iso2: "CZ" },
   { name: "Roumanie", iso2: "RO" },
+  { name: "Grande-Bretagne", iso2: "GB" },
   { name: "Slovaquie", iso2: "SK" },
   { name: "Slovénie", iso2: "SI" },
   { name: "Suède", iso2: "SE" },
+  { name: "Suisse", iso2: "CH" },
 ];
 
 //constant du scopre global
@@ -92,7 +95,7 @@ function generateCharts(dataArray) {
     const keysToExclude = ["unknown", "hydro discharge", "battery discharge"];
 
     const countryData = Object.fromEntries(
-      Object.entries(pays.powerConsumptionBreakdown).filter(
+      Object.entries(pays.powerProductionBreakdown).filter(
         ([key]) => !keysToExclude.includes(key)
       )
     );
@@ -199,10 +202,7 @@ boutonTrier.addEventListener("click", function () {
   }
   const CountryByNuclear = Array.from(DataArray);
   CountryByNuclear.sort(function (a, b) {
-    return (
-      ordre *
-      (b.powerProductionBreakdown.nuclear - a.powerProductionBreakdown.nuclear)
-    );
+    return ordre * (b.powerProductionTotal - a.powerProductionTotal);
   });
   document.querySelector("#conteneur").innerHTML = "";
   generateCharts(CountryByNuclear);
